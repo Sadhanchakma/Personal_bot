@@ -27,30 +27,33 @@
 📂 Project Structure
 
 📁 Personal_bot
- ├── main.py        # Bot runner
- ├── handlers.py    # All bot logic
- ├── database.py    # Data handling
- ├── config.py      # Token & Admin ID
+ ├── main.py
+ ├── handlers.py
+ ├── database.py
+ ├── config.py
 
 ---
 
-⚙️ Setup
+⚙️ Setup & Installation
 
 1️⃣ Clone the repo:
 
-git clone https://github.com/yourusername/yourrepo.git
-cd yourrepo
+git clone https://github.com/Sadhanchakma/Personal_bot.git
 
 2️⃣ Install requirements:
 
+pip install -r requirements.txt
+
+3️⃣ Or install manually:
+
 pip install python-telegram-bot
 
-3️⃣ Edit "config.py":
+4️⃣ Edit "config.py":
 
 TOKEN = "YOUR_BOT_TOKEN"
 ADMIN_ID = YOUR_TELEGRAM_ID
 
-4️⃣ Run the bot:
+5️⃣ Run the bot:
 
 python main.py
 
