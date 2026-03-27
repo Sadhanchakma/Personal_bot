@@ -5,24 +5,24 @@ from config import ADMIN_ID
 users = load_data()
 user_steps = {}
 
-  services = {
-   "Netflix": {
-    "1 Month 1 Screen (Share) Price 350": 350,
-    "1 Month 2 Screen (Share) Price 680": 680,
-    "1 Month 3 Screen (Share) Price 1020": 1020,
-    "1 Month 4 Screen (Share) Price 1350": 1350,
-    "1 Month 5 Screen (Share) Price 1700": 1700,
-    "2 Month 1 Screen (Share) Price 680": 680,
-    "3 Month 1 Screen (Share) Price 980": 980,
-    "1 Month (Private) Price 1500": 1500
-}
+services = {
+    "Netflix": {
+        "1 Month 1 Screen (Share) Price 350": 350,
+        "1 Month 2 Screen (Share) Price 680": 680,
+        "1 Month 3 Screen (Share) Price 1020": 1020,
+        "1 Month 4 Screen (Share) Price 1350": 1350,
+        "1 Month 5 Screen (Share) Price 1700": 1700,
+        "2 Month 1 Screen (Share) Price 680": 680,
+        "3 Month 1 Screen (Share) Price 980": 980,
+        "1 Month (Private) Price 1500": 1500
+    },
 
-  "Spotify": {
-    "1 Month (Premium) Price 200": 200,
-    "3 Month (Premium) Price 580": 580,
-    "6 Month (Premium) Price 1080": 1080,
-    "12 Month (Premium) Price 2160": 2160
-}
+    "Spotify": {
+        "1 Month (Premium) Price 200": 200,
+        "3 Month (Premium) Price 580": 580,
+        "6 Month (Premium) Price 1080": 1080,
+        "12 Month (Premium) Price 2160": 2160
+    },
 
     "YouTube Premium": {
         "1 Month (Premium) Price 120": 120,
@@ -159,6 +159,7 @@ async def start(update, context):
     else:
         username_text = "No Username"
 
+    # ✅ USER AUTO SAVE
     if user_id not in users:
         users[user_id] = {"balance": 0}
         save_data(users)
@@ -202,7 +203,7 @@ async def handle(update, context):
     if text == "💰 Balance":
         user_steps.pop(user_id, None)
         bal = users[uid]["balance"]
-        return await update.message.reply_text(f"💰 Balance: {bal} Tk")
+        return await update.message.reply_text(f"💰 তোমার বর্তমান টাকার পরিমাণ: {bal} Tk")
 
     # ➕ ADD BALANCE
     if text == "➕ Add Balance":
@@ -298,7 +299,10 @@ async def handle(update, context):
 ━━━━━━━━━━━━━━━━━━━━"""
             )
 
-        # SERVICE SELECT
+
+
+
+# SERVICE SELECT
         elif step == "service":
             if text not in services:
                 return await update.message.reply_text("❌ Valid service select korun")
@@ -316,13 +320,15 @@ async def handle(update, context):
                 reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
             )
 
-        # PLAN SELECT
+        # PLAN SELECT ✅ (এটাই ঠিক জায়গা)
         elif step == "plan":
             service = user_steps[user_id]["service"]
             plans = services[service]
 
             if text not in plans:
-                return await update.message.reply_text("❌ Valid plan select korun")
+                return await update.message.reply_text(
+                    "❌ অনুগ্রহ করে সঠিক প্ল্যান নির্বাচন করুন"
+                )
 
             price = plans[text]
 
@@ -333,15 +339,33 @@ async def handle(update, context):
                 user_steps.pop(user_id)
 
                 return await update.message.reply_text(
-                    f"""✅ Order Successful!
+                    f"""✅ অর্ডার সফল হয়েছে!
 
-📦 Service: {service}
-💎 Plan: {text}
-💰 Price: {price} Tk
-⬆️  Forward it our admin @Sadhan_chakma"""
+━━━━━━━━━━━━━━━━━━━━
+📦 সার্ভিস: {service}
+💎 প্ল্যান: {text}
+💰 মূল্য: {price} টাকা
+━━━━━━━━━━━━━━━━━━━━
+
+📤 অ্যাডমিন:
+👤 @Sadhan_chakma"""
                 )
+
             else:
-                return await update.message.reply_text("❌ Balance nai!")
+                return await update.message.reply_text(
+                    """❌ দুঃখিত! আপনার ব্যালেন্স পর্যাপ্ত নায়।
+
+━━━━━━━━━━━━━━━━━━━━
+💡 আগে ব্যালেন্স যোগ করুন
+━━━━━━━━━━━━━━━━━━━━
+
+👉 "➕ Add Balance" চাপুন"""
+                )
+
+
+
+
+
 
 # ---------------- HANDLE PHOTO ----------------
 async def handle_photo(update, context):
