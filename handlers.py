@@ -5,7 +5,6 @@ from config import ADMIN_ID
 users = load_data()
 user_steps = {}
 
-services = {
   services = {
    "Netflix": {
     "1 Month 1 Screen (Share) Price 350": 350,
