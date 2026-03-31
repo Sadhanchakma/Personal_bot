@@ -1,12 +1,15 @@
 from telegram import ReplyKeyboardMarkup, KeyboardButton
-from telegram.constants import KeyboardButtonStyle  # ADDED!
+try:
+    from telegram.constants import KeyboardButtonStyle  # v21.4+
+except ImportError:
+    KeyboardButtonStyle = None  # OLD version fallback
+
 from database import load_data, save_data
 from config import ADMIN_ID
 
 # ডাটাবেস থেকে ইউজার ডাটা লোড করা
 users = load_data()
 user_steps = {}
-
 # সার্ভিসের তালিকা এবং মূল্য
 services = {
     "Netflix": {
@@ -51,27 +54,30 @@ services = {
     }
 }
 
-# ---------------- BLUE REPLY KEYBOARD FUNCTION ---------------- ADDED!
+# ✅ BULLETPROOF BLUE KEYBOARD - Works on ALL hosting!
 def get_blue_keyboard(buttons):
-    """Returns BLUE ReplyKeyboard with PRIMARY style"""
-    blue_keyboard = []
-    for row in buttons:
-        blue_row = [KeyboardButton(text, style=KeyboardButtonStyle.PRIMARY) for text in row]
-        blue_keyboard.append(blue_row)
-    return ReplyKeyboardMarkup(blue_keyboard, resize_keyboard=True)
+    """BLUE ReplyKeyboard - v21.4+ = BLUE, OLD = Regular (both look great!)"""
+    if KeyboardButtonStyle:
+        # NEW VERSION: TRUE BLUE BUTTONS! 🔵
+        blue_keyboard = []
+        for row in buttons:
+            blue_row = [KeyboardButton(text, style=KeyboardButtonStyle.PRIMARY) for text in row]
+            blue_keyboard.append(blue_row)
+        return ReplyKeyboardMarkup(blue_keyboard, resize_keyboard=True)
+    else:
+        # OLD VERSION: Regular buttons (still professional)
+        regular_keyboard = [[KeyboardButton(text) for text in row] for row in buttons]
+        return ReplyKeyboardMarkup(regular_keyboard, resize_keyboard=True)
 
 # ---------------- MAIN MENU ----------------
 async def main_menu(update):
-    keyboard = [
-        ["💰 Balance", "➕ Add Balance"],
-        ["🛒 Buy Service", "🎁 Referral"],
-        ["❓ Help"]
-    ]
+    keyboard = [["💰 Balance", "➕ Add Balance"], ["🛒 Buy Service", "🎁 Referral"], ["❓ Help"]]
     await update.message.reply_text(
         '<tg-emoji emoji-id="5416041192905265756">🏠</tg-emoji> <b>Main Menu</b>',
-        reply_markup=get_blue_keyboard(keyboard),  # CHANGED TO BLUE!
+        reply_markup=get_blue_keyboard(keyboard),
         parse_mode="HTML"
     )
+
 
 # ---------------- START COMMAND ----------------
 async def start(update, context):
