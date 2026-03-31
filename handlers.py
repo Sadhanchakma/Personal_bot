@@ -1,4 +1,5 @@
-from telegram import ReplyKeyboardMarkup
+from telegram import ReplyKeyboardMarkup, KeyboardButton
+from telegram.constants import KeyboardButtonStyle  # ADDED!
 from database import load_data, save_data
 from config import ADMIN_ID
 
@@ -50,6 +51,15 @@ services = {
     }
 }
 
+# ---------------- BLUE REPLY KEYBOARD FUNCTION ---------------- ADDED!
+def get_blue_keyboard(buttons):
+    """Returns BLUE ReplyKeyboard with PRIMARY style"""
+    blue_keyboard = []
+    for row in buttons:
+        blue_row = [KeyboardButton(text, style=KeyboardButtonStyle.PRIMARY) for text in row]
+        blue_keyboard.append(blue_row)
+    return ReplyKeyboardMarkup(blue_keyboard, resize_keyboard=True)
+
 # ---------------- MAIN MENU ----------------
 async def main_menu(update):
     keyboard = [
@@ -59,7 +69,7 @@ async def main_menu(update):
     ]
     await update.message.reply_text(
         '<tg-emoji emoji-id="5416041192905265756">🏠</tg-emoji> <b>Main Menu</b>',
-        reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True),
+        reply_markup=get_blue_keyboard(keyboard),  # CHANGED TO BLUE!
         parse_mode="HTML"
     )
 
@@ -81,7 +91,7 @@ async def start(update, context):
             try:
                 await context.bot.send_message(
                     chat_id=int(referrer_id), 
-                    text='<tg-emoji emoji-id="4958699241137505132">🎁</tg-emoji> <b>আপনার লিংকে নতুন একজন জয়েন করেছে! আপনি ৫ টাকা বোনাস পেয়েছেন।</b>',
+                    text='<tg-emoji emoji-id="4958699241137505132">🎁</tg-emoji> <b>আপনার লিংকে নতুন একজন জয়েন করেছে! আপনি ৫ টাকা বোনাস পেয়েছেন।</b>',
                     parse_mode="HTML"
                 )
             except: 
@@ -106,7 +116,7 @@ async def start(update, context):
 
     await update.message.reply_text(
         welcome_msg,
-        reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True),
+        reply_markup=get_blue_keyboard(keyboard),  # CHANGED TO BLUE!
         parse_mode="HTML"
     )
 
@@ -126,6 +136,7 @@ async def handle(update, context):
         user_steps.pop(user_id, None)
         return await update.message.reply_text(
             '<tg-emoji emoji-id="4958526153955476488">❌</tg-emoji> <b>Process cancelled</b>', 
+            reply_markup=get_blue_keyboard([["🔙 Back"]]),  # BLUE BACK BUTTON!
             parse_mode="HTML"
         )
 
@@ -134,6 +145,7 @@ async def handle(update, context):
         bal = users[uid]["balance"]
         return await update.message.reply_text(
             f'<tg-emoji emoji-id="4958926882994127612">💰</tg-emoji> <b>বর্তমান টাকার পরিমাণ:</b> {bal} Tk', 
+            reply_markup=get_blue_keyboard([["🔙 Back"]]),  # BLUE BACK!
             parse_mode="HTML"
         )
 
@@ -146,10 +158,13 @@ async def handle(update, context):
             f'<tg-emoji emoji-id="4958689671950369798">🔗</tg-emoji> <b>লিংক:</b> <code>{refer_link}</code>\n'
             f'<tg-emoji emoji-id="5372926953978341366">👥</tg-emoji> <b>মোট রেফার:</b> {count} জন'
         )
-        return await update.message.reply_text(ref_msg, parse_mode="HTML")
+        return await update.message.reply_text(
+            ref_msg, 
+            reply_markup=get_blue_keyboard([["🔙 Back"]]),  # BLUE BACK!
+            parse_mode="HTML"
+        )
 
     # সাহায্য মেনু
-# সাহায্য মেনু
     if text == "❓ Help":
         help_text = (
             f'<tg-emoji emoji-id="6210598417404534865">ℹ️</tg-emoji> '
@@ -158,10 +173,14 @@ async def handle(update, context):
             f'@Sadhan_Chakma '
             f'<tg-emoji emoji-id="6212779255768554475">💠</tg-emoji>\n\n'
             f'<b>বটটি যেভাবে কাজ করে:</b>\n'
-            f'১. প্রথমে <b>Add Balance</b> এ গিয়ে টাকা রিচার্জ করুন।\n'
+            f'১. প্রথমে <b>Add Balance</b> এ গিয়ে টাকা রিচার্জ করুন।\n'
             f'২. টাকা অ্যাড হলে <b>Buy Service</b> থেকে আপনার পছন্দের সার্ভিসটি বেছে নিন।'
         )
-        return await update.message.reply_text(help_text, parse_mode="HTML")
+        return await update.message.reply_text(
+            help_text, 
+            reply_markup=get_blue_keyboard([["🔙 Back"]]),  # BLUE BACK!
+            parse_mode="HTML"
+        )
 
     # ব্যালেন্স অ্যাড করার ধাপ শুরু
     if text == "➕ Add Balance":
@@ -169,7 +188,7 @@ async def handle(update, context):
         keyboard = [["bKash", "Nagad"], ["Rocket", "Binance"], ["🔙 Back", "❌ Cancel"]]
         return await update.message.reply_text(
             '<tg-emoji emoji-id="6273684842668366415">💳</tg-emoji> <b>পেমেন্ট মেথড নির্বাচন করুন:</b>', 
-            reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True), 
+            reply_markup=get_blue_keyboard(keyboard),  # BLUE PAYMENT BUTTONS!
             parse_mode="HTML"
         )
 
@@ -190,6 +209,7 @@ async def handle(update, context):
             f'<code>{numbers[text]}</code>\n\n'
             f'<tg-emoji emoji-id="4956601935592424315">💲</tg-emoji> Minimum Amount : 100 Tk\n'
             f'<tg-emoji emoji-id="6158862632926319619">👉</tg-emoji> <b>আপনার টাকার পরিমাণ দেন:</b>', 
+            reply_markup=get_blue_keyboard([["🔙 Back", "❌ Cancel"]]),  # BLUE BACK/CANCEL!
             parse_mode="HTML"
         )
 
@@ -199,20 +219,24 @@ async def handle(update, context):
         keyboard = [[s] for s in services.keys()] + [["🔙 Back"]]
         return await update.message.reply_text(
             '<tg-emoji emoji-id="5431499171045581032">🛒</tg-emoji> <b>Service select করুন:</b>', 
-            reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True), 
+            reply_markup=get_blue_keyboard(keyboard),  # BLUE SERVICE BUTTONS!
             parse_mode="HTML"
         )
 
-    # ইউজার স্টেপ অনুযায়ী ইনপুট হ্যান্ডলিং
+    # ইউজার স্টেপ অনুযায়ী ইনপুট হ্যান্ডলিং
     if user_id in user_steps:
         step = user_steps[user_id]["step"]
 
         if step == "amount":
             if not text.isdigit(): 
-                return await update.message.reply_text("❌ সংখ্যা দিন")
+                return await update.message.reply_text(
+                    "❌ সংখ্যা দিন", 
+                    reply_markup=get_blue_keyboard([["🔙 Back"]])  # BLUE BACK!
+                )
             user_steps[user_id].update({"step": "trx", "amount": int(text)})
             return await update.message.reply_text(
                 '<tg-emoji emoji-id="5330115548900501467">🔑</tg-emoji> <b>ট্রানজ্যাকশন আইডি (TRX ID) দিন:</b>', 
+                reply_markup=get_blue_keyboard([["🔙 Back", "❌ Cancel"]]),  # BLUE!
                 parse_mode="HTML"
             )
 
@@ -220,6 +244,7 @@ async def handle(update, context):
             user_steps[user_id].update({"step": "ss", "trx": text})
             return await update.message.reply_text(
                 '<tg-emoji emoji-id="5235837920081887219">📸</tg-emoji> <b>পেমেন্টের স্ক্রিনশটটি পাঠান:</b>', 
+                reply_markup=get_blue_keyboard([["🔙 Back", "❌ Cancel"]]),  # BLUE!
                 parse_mode="HTML"
             )
 
@@ -236,7 +261,7 @@ async def handle(update, context):
             keyboard = [[p] for p in services[text].keys()] + [["🔙 Back"]]
             return await update.message.reply_text(
                 f'<tg-emoji emoji-id="{s_id}">💎</tg-emoji> <b>{text} plan select করুন:</b>', 
-                reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True), 
+                reply_markup=get_blue_keyboard(keyboard),  # BLUE PLAN BUTTONS!
                 parse_mode="HTML"
             )
 
@@ -249,14 +274,16 @@ async def handle(update, context):
                 save_data(users)
                 user_steps.pop(user_id)
                 return await update.message.reply_text(
-                    f'<tg-emoji emoji-id="4958610528588008305">✅</tg-emoji> <b>অর্ডার সফল হয়েছে!</b>\n\n'
+                    f'<tg-emoji emoji-id="4958610528588008305">✅</tg-emoji> <b>অর্ডার সফল হয়েছে!</b>\n\n'
                     f'📦 সার্ভিস: {service}\n💎 প্ল্যান: {text}\n💰 মূল্য: {price} Tk\n'
                     f'━━━━━━━━━━━━━━━━━━━━\n<tg-emoji emoji-id="5433614747381538714">📤</tg-emoji> @Sadhan_chakma',
+                    reply_markup=get_blue_keyboard([["🔙 Back"]]),  # BLUE BACK!
                     parse_mode="HTML"
                 )
             else:
                 return await update.message.reply_text(
-                    '<tg-emoji emoji-id="6215419994935660864">❗️</tg-emoji> <b>ব্যালেন্স পর্যাপ্ত নয়।</b>', 
+                    '<tg-emoji emoji-id="6215419994935660864">❗️</tg-emoji> <b>ব্যালেন্স পর্যাপ্ত নয়।</b>', 
+                    reply_markup=get_blue_keyboard([["🔙 Back"]]),  # BLUE BACK!
                     parse_mode="HTML"
                 )
 
@@ -291,8 +318,9 @@ async def handle_photo(update, context):
             
         await update.message.reply_text(
             '<tg-emoji emoji-id="4958587679361991667">🔎</tg-emoji> <b>রিকুয়েস্ট সফল! যাচাই শেষে ব্যালেন্স যোগ হবে।</b>', 
+            reply_markup=get_blue_keyboard([["🔙 Back"]]),  # BLUE BACK!
             parse_mode="HTML"
-            )
+        )
         user_steps.pop(user_id)
 
 # ---------------- ADMIN ADD BALANCE COMMAND ----------------
@@ -310,6 +338,7 @@ async def addbalance(update, context):
         await context.bot.send_message(
             chat_id=int(u_id), 
             text=f'<tg-emoji emoji-id="4958926882994127612">💰</tg-emoji> <b>{amount} Tk added to your balance!</b>', 
+            reply_markup=get_blue_keyboard([["🔙 Back"]]),  # BLUE BACK!
             parse_mode="HTML"
         )
     except:
