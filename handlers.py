@@ -2,137 +2,51 @@ from telegram import ReplyKeyboardMarkup
 from database import load_data, save_data
 from config import ADMIN_ID
 
+# ডাটাবেস থেকে ইউজার ডাটা লোড করা
 users = load_data()
 user_steps = {}
 
+# সার্ভিসের তালিকা এবং মূল্য
 services = {
     "Netflix": {
-        "1 Month 1 Screen (Share) Price 350": 350,
-        "1 Month 2 Screen (Share) Price 680": 680,
-        "1 Month 3 Screen (Share) Price 1020": 1020,
-        "1 Month 4 Screen (Share) Price 1350": 1350,
-        "1 Month 5 Screen (Share) Price 1700": 1700,
-        "2 Month 1 Screen (Share) Price 680": 680,
-        "3 Month 1 Screen (Share) Price 980": 980,
-        "1 Month (Private) Price 1500": 1500
+        "1 Month 1 Screen (Share) Price 350": 350, 
+        "1 Month 2 Screen (Share) Price 680": 680
     },
-
     "Spotify": {
-        "1 Month (Premium) Price 200": 200,
-        "3 Month (Premium) Price 580": 580,
-        "6 Month (Premium) Price 1080": 1080,
-        "12 Month (Premium) Price 2160": 2160
+        "1 Month (Premium) Price 200": 200, 
+        "3 Month (Premium) Price 580": 580
     },
-
     "YouTube Premium": {
-        "1 Month (Premium) Price 120": 120,
+        "1 Month (Premium) Price 120": 120, 
         "1 Year (Premium) Price 2899": 2899
     },
-
     "Amazon Prime": {
-        "1 Month (Premium) Price 100": 100,
-        "3 Month (Premium) Price 300": 300,
-        "6 Month (Premium) Price 600": 600,
-        "12 Month (Premium) Price 1200": 1200
+        "1 Month (Premium) Price 100": 100, 
+        "3 Month (Premium) Price 300": 300
     },
-
     "Crunchyroll": {
-        "1 Month (Premium) Price 180": 180,
-        "3 Month (Premium) Price 499": 499,
-        "6 Month (Premium) Price 1080": 1080,
-        "12 Month (Premium) Price 2160": 2160
+        "1 Month (Premium) Price 180": 180, 
+        "3 Month (Premium) Price 499": 499
     },
-
     "Hulu": {
-        "1 Month (Premium) Price 230": 230,
-        "3 Month (Premium) Price 650": 650,
-        "6 Month (Premium) Price 1200": 1200,
-        "12 Month (Premium) Price 2400": 2400
+        "1 Month (Premium) Price 230": 230, 
+        "3 Month (Premium) Price 650": 650
     },
-
-    "Sony LIV": {
-        "1 Month (Premium) Price 220": 220,
-        "3 Month (Premium) Price 650": 650,
-        "6 Month (Premium) Price 1080": 1080,
-        "12 Month (Premium) Price 2160": 2160
-    },
-
     "Disney+": {
-        "1 Month (Premium) Price 350": 350,
+        "1 Month (Premium) Price 350": 350, 
         "3 Month (Premium) Price 1050": 1050
     },
-
     "Disney+ Hotstar": {
-        "1 Month (Premium) Price 180": 180,
-        "3 Month (Premium) Price 540": 540,
-        "6 Month (Premium) Price 1080": 1080,
-        "12 Month (Premium) Price 2160": 2160
+        "1 Month (Premium) Price 180": 180, 
+        "3 Month (Premium) Price 540": 540
     },
-
     "HBO Max": {
-        "1 Month (Premium) Price 180": 180,
-        "3 Month (Premium) Price 540": 540,
-        "6 Month (Premium) Price 1080": 1080,
-        "12 Month (Premium) Price 2160": 2160
+        "1 Month (Premium) Price 180": 180, 
+        "3 Month (Premium) Price 540": 540
     },
-
-    "Chorki": {
-        "1 Month (Premium) Price 150": 150,
-        "3 Month (Premium) Price 450": 450,
-        "6 Month (Premium) Price 1080": 1080,
-        "12 Month (Premium) Price 2160": 2160
-    },
-
     "Telegram Premium": {
-        "1 Month (Premium) Price 600": 600,
-        "3 Month (Premium) Price 1800": 1800,
-        "6 Month (Premium) Price 3600": 3600,
-        "12 Month (Premium) Price 7200": 7200
-    },
-
-    "Canva Pro": {
-        "1 Month (Premium) Price 30": 30,
-        "3 Month (Premium) Price 90": 90,
-        "6 Month (Premium) Price 180": 180,
-        "12 Month (Premium) Price 360": 360,
-        "Lifetime (Premium) Price 499": 499
-    },
-
-    "ChatGPT": {
-        "1 Month (Premium) Price 600": 600,
-        "3 Month (Premium) Price 1800": 1800,
-        "6 Month (Premium) Price 3600": 3600,
-        "12 Month (Premium) Price 7200": 7200
-    },
-
-    "PUBG UC": {
-        "120 UC Price 210": 210,
-        "180 UC Price 300": 300,
-        "376 UC Price 1050": 1050,
-        "660 UC Price 1990": 1990,
-        "780 UC Price 2300": 2300,
-        "1800 UC Price 5200": 5200,
-        "2175 UC Price 6000": 6000,
-        "4000 UC Price 10500": 10500,
-        "8400 UC Price 19900": 19900,
-        "16800 UC Price 39000": 39000,
-        "33600 UC Price 78000": 78000,
-        "42000 UC Price 99000": 99000
-    },
-
-    "ML Diamonds": {
-        "14 Diamond Price 60": 60,
-        "42 Diamond Price 180": 180,
-        "70 Diamond Price 300": 300,
-        "140 Diamond Price 600": 600,
-        "284 Diamond Price 1200": 1200,
-        "355 Diamond Price 1500": 1500,
-        "429 Diamond Price 1800": 1800,
-        "716 Diamond Price 3000": 3000,
-        "1446 Diamond Price 6000": 6000,
-        "2976 Diamond Price 12000": 12000,
-        "7502 Diamond Price 20440": 20440,
-        "10478 Diamond Price 28000": 28000
+        "1 Month (Premium) Price 600": 600, 
+        "3 Month (Premium) Price 1800": 1800
     }
 }
 
@@ -140,291 +54,263 @@ services = {
 async def main_menu(update):
     keyboard = [
         ["💰 Balance", "➕ Add Balance"],
-        ["🛒 Buy Service"]
+        ["🛒 Buy Service", "🎁 Referral"],
+        ["❓ Help"]
     ]
     await update.message.reply_text(
-        "🏠 Main Menu",
-        reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+        '<tg-emoji emoji-id="5416041192905265756">🏠</tg-emoji> <b>Main Menu</b>',
+        reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True),
+        parse_mode="HTML"
     )
 
-# ---------------- START ----------------
+# ---------------- START COMMAND ----------------
 async def start(update, context):
     user = update.message.from_user
     user_id = str(user.id)
-    username = user.username
+    full_name = user.first_name 
+    username = user.username or "No Username"
 
-    if username:
-        username_text = username.replace("_", "\\_")
-        username_text = f"@{username_text}"
-    else:
-        username_text = "No Username"
-
-    # ✅ USER AUTO SAVE
+    # নতুন ইউজার রেজিস্ট্রেশন এবং রেফারেল চেক
     if user_id not in users:
-        users[user_id] = {"balance": 0}
+        referrer_id = context.args[0] if context.args else None
+        users[user_id] = {"balance": 0, "referred_by": referrer_id, "refer_count": 0}
+        
+        if referrer_id and referrer_id in users and referrer_id != user_id:
+            users[referrer_id]["balance"] += 5 
+            users[referrer_id]["refer_count"] = users[referrer_id].get("refer_count", 0) + 1
+            try:
+                await context.bot.send_message(
+                    chat_id=int(referrer_id), 
+                    text='<tg-emoji emoji-id="4958699241137505132">🎁</tg-emoji> <b>আপনার লিংকে নতুন একজন জয়েন করেছে! আপনি ৫ টাকা বোনাস পেয়েছেন।</b>',
+                    parse_mode="HTML"
+                )
+            except: 
+                pass
         save_data(users)
 
     keyboard = [
         ["💰 Balance", "➕ Add Balance"],
-        ["🛒 Buy Service"]
+        ["🛒 Buy Service", "🎁 Referral"],
+        ["❓ Help"]
     ]
 
-    await update.message.reply_text(
-        f"""👋 স্বাগতম! {username_text}
-
-👤 Username: {username_text}
-🆔 User ID: `{user_id}`
-
-💰 Balance: {users[user_id]['balance']} Tk
-━━━━━━━━━━━━━━━━━━━━
-✨ আপনার অ্যাকাউন্ট সফলভাবে লোড হয়েছে  
-━━━━━━━━━━━━━━━━━━━━""",
-        reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True),
-        parse_mode="Markdown"
+    welcome_msg = (
+        f'<tg-emoji emoji-id="5413694143601842851">👋</tg-emoji> <b>স্বাগতম! {full_name}</b>\n\n'
+        f'<tg-emoji emoji-id="5373012449597335010">👤</tg-emoji> <b>Username:</b> @{username}\n'
+        f'<tg-emoji emoji-id="5841276284155467413">🆔</tg-emoji> <b>User ID:</b> <code>{user_id}</code>\n\n'
+        f'<tg-emoji emoji-id="4958926882994127612">💰</tg-emoji> <b>Balance:</b> {users[user_id]["balance"]} Tk\n'
+        f'━━━━━━━━━━━━━━━━━━━━\n'
+        f'<tg-emoji emoji-id="4958489311726011319">✨</tg-emoji> <b>আপনার অ্যাকাউন্ট সফলভাবে লোড হয়েছে</b>\n'
+        f'━━━━━━━━━━━━━━━━━━━━'
     )
 
-# ---------------- HANDLE TEXT ----------------
+    await update.message.reply_text(
+        welcome_msg,
+        reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True),
+        parse_mode="HTML"
+    )
+
+# ---------------- HANDLE TEXT MESSAGES ----------------
 async def handle(update, context):
     user_id = update.message.from_user.id
     text = update.message.text
     uid = str(user_id)
+    bot_username = (await context.bot.get_me()).username
 
-    # 🔙 BACK
+    # নেভিগেশন বাটন
     if text == "🔙 Back":
         user_steps.pop(user_id, None)
         return await main_menu(update)
 
-    # ❌ CANCEL
     if text == "❌ Cancel":
         user_steps.pop(user_id, None)
-        return await update.message.reply_text("❌ Process cancelled")
+        return await update.message.reply_text(
+            '<tg-emoji emoji-id="4958526153955476488">❌</tg-emoji> <b>Process cancelled</b>', 
+            parse_mode="HTML"
+        )
 
-    # 💰 BALANCE
+    # ব্যালেন্স চেক
     if text == "💰 Balance":
-        user_steps.pop(user_id, None)
         bal = users[uid]["balance"]
-        return await update.message.reply_text(f"💰 তোমার বর্তমান টাকার পরিমাণ: {bal} Tk")
+        return await update.message.reply_text(
+            f'<tg-emoji emoji-id="4958926882994127612">💰</tg-emoji> <b>বর্তমান টাকার পরিমাণ:</b> {bal} Tk', 
+            parse_mode="HTML"
+        )
 
-    # ➕ ADD BALANCE
+    # রেফারেল তথ্য
+    if text == "🎁 Referral":
+        refer_link = f"https://t.me/{bot_username}?start={user_id}"
+        count = users[uid].get("refer_count", 0)
+        ref_msg = (
+            f'<tg-emoji emoji-id="4958699241137505132">🎁</tg-emoji> <b>আপনার রেফারেল তথ্য</b>\n\n'
+            f'<tg-emoji emoji-id="4958689671950369798">🔗</tg-emoji> <b>লিংক:</b> <code>{refer_link}</code>\n'
+            f'<tg-emoji emoji-id="5372926953978341366">👥</tg-emoji> <b>মোট রেফার:</b> {count} জন'
+        )
+        return await update.message.reply_text(ref_msg, parse_mode="HTML")
+
+    # সাহায্য মেনু
+# সাহায্য মেনু
+    if text == "❓ Help":
+        help_text = (
+            f'<tg-emoji emoji-id="6210598417404534865">ℹ️</tg-emoji> '
+            f'<tg-emoji emoji-id="6210868652451832759">❓</tg-emoji> '
+            f'<tg-emoji emoji-id="6213057917541688006">🆘</tg-emoji> '
+            f'@Sadhan_Chakma '
+            f'<tg-emoji emoji-id="6212779255768554475">💠</tg-emoji>\n\n'
+            f'<b>বটটি যেভাবে কাজ করে:</b>\n'
+            f'১. প্রথমে <b>Add Balance</b> এ গিয়ে টাকা রিচার্জ করুন।\n'
+            f'২. টাকা অ্যাড হলে <b>Buy Service</b> থেকে আপনার পছন্দের সার্ভিসটি বেছে নিন।'
+        )
+        return await update.message.reply_text(help_text, parse_mode="HTML")
+
+    # ব্যালেন্স অ্যাড করার ধাপ শুরু
     if text == "➕ Add Balance":
         user_steps[user_id] = {"step": "method"}
-
-        keyboard = [
-            ["bKash", "Nagad"],
-            ["Rocket", "Binance"],
-            ["🔙 Back", "❌ Cancel"]
-        ]
-
+        keyboard = [["bKash", "Nagad"], ["Rocket", "Binance"], ["🔙 Back", "❌ Cancel"]]
         return await update.message.reply_text(
-            "💳 পেমেন্ট মেথড নির্বাচন করুন:",
-            reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+            '<tg-emoji emoji-id="6273684842668366415">💳</tg-emoji> <b>পেমেন্ট মেথড নির্বাচন করুন:</b>', 
+            reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True), 
+            parse_mode="HTML"
         )
 
-    # 🛒 BUY SERVICE
+    # পেমেন্ট মেথড হ্যান্ডলার
+    payment_methods = ["bKash", "Nagad", "Rocket", "Binance"]
+    if text in payment_methods:
+        numbers = {"bKash": "01537310053", "Nagad": "01533833020", "Rocket": "01537310053", "Binance": "989885533"}
+        method_emojis = {
+            "bKash": "6172387334617569402", 
+            "Nagad": "6172505618016900525", 
+            "Rocket": "6300809090150964522", 
+            "Binance": "6172522041971842488"
+        }
+        user_steps[user_id] = {"step": "amount", "method": text}
+        m_emoji = method_emojis.get(text)
+        return await update.message.reply_text(
+            f'<tg-emoji emoji-id="{m_emoji}">🏩</tg-emoji> <b>{text} Number:</b>\n\n'
+            f'<code>{numbers[text]}</code>\n\n'
+            f'<tg-emoji emoji-id="4956601935592424315">💲</tg-emoji> Minimum Amount : 100 Tk\n'
+            f'<tg-emoji emoji-id="6158862632926319619">👉</tg-emoji> <b>আপনার টাকার পরিমাণ দেন:</b>', 
+            parse_mode="HTML"
+        )
+
+    # সার্ভিস কেনা শুরু
     if text == "🛒 Buy Service":
         user_steps[user_id] = {"step": "service"}
-
-        keyboard = [[s] for s in services.keys()]
-        keyboard.append(["🔙 Back"])
-
+        keyboard = [[s] for s in services.keys()] + [["🔙 Back"]]
         return await update.message.reply_text(
-            "🛒 Service select korun:",
-            reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+            '<tg-emoji emoji-id="5431499171045581032">🛒</tg-emoji> <b>Service select করুন:</b>', 
+            reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True), 
+            parse_mode="HTML"
         )
 
-    # ---------------- STEP SYSTEM ----------------
+    # ইউজার স্টেপ অনুযায়ী ইনপুট হ্যান্ডলিং
     if user_id in user_steps:
         step = user_steps[user_id]["step"]
 
-        # METHOD
-        if step == "method":
-            numbers = {
-                "bKash": "01537310053",
-                "Nagad": "01533833020",
-                "Rocket": "01537310053",
-                "Binance": "989885533"
-            }
-
-            if text not in numbers:
-                return await update.message.reply_text("❌ Valid method select korun")
-
-            user_steps[user_id]["method"] = text
-            user_steps[user_id]["step"] = "amount"
-
+        if step == "amount":
+            if not text.isdigit(): 
+                return await update.message.reply_text("❌ সংখ্যা দিন")
+            user_steps[user_id].update({"step": "trx", "amount": int(text)})
             return await update.message.reply_text(
-                f"""📲 {text} Number:
-
-`{numbers[text]}`
-
-💰 Minimum Amount : 100 Tk
-👉আপনার টাকার পরিমাণ দেন :""",
-                parse_mode="Markdown"
+                '<tg-emoji emoji-id="5330115548900501467">🔑</tg-emoji> <b>ট্রানজ্যাকশন আইডি (TRX ID) দিন:</b>', 
+                parse_mode="HTML"
             )
 
-        # AMOUNT
-        elif step == "amount":
-            if not text.isdigit():
-                return await update.message.reply_text(
-                    "❌ অনুগ্রহ করে শুধুমাত্র সংখ্যায় পরিমাণ লিখুন"
-                )
-
-            amount = int(text)
-
-            if amount < 100:
-                return await update.message.reply_text(
-                    "❌ সর্বনিম্ন ১০০ টাকা যোগ করতে হবে"
-                )
-
-            user_steps[user_id]["amount"] = amount
-            user_steps[user_id]["step"] = "trx"
-
-            return await update.message.reply_text(
-                """🔑 অনুগ্রহ করে আপনার ট্রানজ্যাকশন আইডি প্রদান করুন:
-
-━━━━━━━━━━━━━━━━━━━━
-⚠️ সঠিক TRX ID দিন, ভুল হলে ব্যালেন্স যোগ করা হবে না
-━━━━━━━━━━━━━━━━━━━━"""
-            )
-
-        # TRX
         elif step == "trx":
-            user_steps[user_id]["trx"] = text
-            user_steps[user_id]["step"] = "ss"
-
+            user_steps[user_id].update({"step": "ss", "trx": text})
             return await update.message.reply_text(
-                """📸 অনুগ্রহ করে আপনার পেমেন্টের স্ক্রিনশটটি পাঠান:
-
-━━━━━━━━━━━━━━━━━━━━
-⚠️ নিশ্চিত করুন স্ক্রিনশটটি পরিষ্কার ও সম্পূর্ণ দেখা যায়
-━━━━━━━━━━━━━━━━━━━━"""
+                '<tg-emoji emoji-id="5235837920081887219">📸</tg-emoji> <b>পেমেন্টের স্ক্রিনশটটি পাঠান:</b>', 
+                parse_mode="HTML"
             )
 
-
-
-
-# SERVICE SELECT
         elif step == "service":
-            if text not in services:
-                return await update.message.reply_text("❌ Valid service select korun")
-
-            user_steps[user_id]["service"] = text
-            user_steps[user_id]["step"] = "plan"
-
-            plans = services[text]
-
-            keyboard = [[p] for p in plans.keys()]
-            keyboard.append(["🔙 Back"])
-
+            if text not in services: return
+            user_steps[user_id].update({"step": "plan", "service": text})
+            s_emojis = {
+                "Netflix": "6212718494866218568", "Spotify": "6210917542064562518",
+                "YouTube Premium": "6212927921766538445", "Amazon Prime": "6212752888964328143",
+                "Telegram Premium": "6212844260098581451", "Disney+ Hotstar": "6210529324265643615",
+                "HBO Max": "6210840035084738342", "Crunchyroll": "6195129886529559586"
+            }
+            s_id = s_emojis.get(text, "4956719506027185156")
+            keyboard = [[p] for p in services[text].keys()] + [["🔙 Back"]]
             return await update.message.reply_text(
-                f"📦 {text} plan select korun:",
-                reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+                f'<tg-emoji emoji-id="{s_id}">💎</tg-emoji> <b>{text} plan select করুন:</b>', 
+                reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True), 
+                parse_mode="HTML"
             )
 
-        # PLAN SELECT ✅ (এটাই ঠিক জায়গা)
         elif step == "plan":
             service = user_steps[user_id]["service"]
-            plans = services[service]
-
-            if text not in plans:
-                return await update.message.reply_text(
-                    "❌ অনুগ্রহ করে সঠিক প্ল্যান নির্বাচন করুন"
-                )
-
-            price = plans[text]
-
+            if text not in services[service]: return
+            price = services[service][text]
             if users[uid]["balance"] >= price:
                 users[uid]["balance"] -= price
                 save_data(users)
-
                 user_steps.pop(user_id)
-
                 return await update.message.reply_text(
-                    f"""✅ অর্ডার সফল হয়েছে!
-
-━━━━━━━━━━━━━━━━━━━━
-📦 সার্ভিস: {service}
-💎 প্ল্যান: {text}
-💰 মূল্য: {price} টাকা
-━━━━━━━━━━━━━━━━━━━━
-
-📤 অ্যাডমিন:
-👤 @Sadhan_chakma"""
+                    f'<tg-emoji emoji-id="4958610528588008305">✅</tg-emoji> <b>অর্ডার সফল হয়েছে!</b>\n\n'
+                    f'📦 সার্ভিস: {service}\n💎 প্ল্যান: {text}\n💰 মূল্য: {price} Tk\n'
+                    f'━━━━━━━━━━━━━━━━━━━━\n<tg-emoji emoji-id="5433614747381538714">📤</tg-emoji> @Sadhan_chakma',
+                    parse_mode="HTML"
                 )
-
             else:
                 return await update.message.reply_text(
-                    """❌ দুঃখিত! আপনার ব্যালেন্স পর্যাপ্ত নায়।
-
-━━━━━━━━━━━━━━━━━━━━
-💡 আগে ব্যালেন্স যোগ করুন
-━━━━━━━━━━━━━━━━━━━━
-
-👉 "➕ Add Balance" চাপুন"""
+                    '<tg-emoji emoji-id="6215419994935660864">❗️</tg-emoji> <b>ব্যালেন্স পর্যাপ্ত নয়।</b>', 
+                    parse_mode="HTML"
                 )
 
-
-
-
-
-
-# ---------------- HANDLE PHOTO ----------------
+# ---------------- PHOTO HANDLER ----------------
 async def handle_photo(update, context):
     user_id = update.message.from_user.id
-
     if user_id in user_steps and user_steps[user_id]["step"] == "ss":
         data = user_steps[user_id]
-
-        caption = f"""
-💰 New Balance Request
-
-👤 User ID: {user_id}
-💳 Method: {data['method']}
-💵 Amount: {data['amount']} Tk
-🔑 TRX ID: {data['trx']}
-"""
-
-        await context.bot.send_photo(
-            chat_id=ADMIN_ID,
-            photo=update.message.photo[-1].file_id,
-            caption=caption
+        
+        caption = (
+            f'<tg-emoji emoji-id="4956480749147521743">💰</tg-emoji> <b>New Request</b>\n'
+            f'<tg-emoji emoji-id="5373012449597335010">👤</tg-emoji> <b>ID:</b> <code>{user_id}</code>\n'
+            f'<tg-emoji emoji-id="6273684842668366415">💳</tg-emoji> <b>Method:</b> {data["method"]}\n'
+            f'<tg-emoji emoji-id="4958926882994127612">💵</tg-emoji> <b>Amount:</b> {data["amount"]} Tk\n'
+            f'<tg-emoji emoji-id="5330115548900501467">🔑</tg-emoji> <b>TRX:</b> <code>{data["trx"]}</code>'
         )
 
+        try:
+            await context.bot.send_photo(
+                chat_id=ADMIN_ID, 
+                photo=update.message.photo[-1].file_id, 
+                caption=caption, 
+                parse_mode="HTML"
+            )
+        except:
+            plain_caption = f"💰 New Request\n👤 ID: {user_id}\n💳 Method: {data['method']}\n💵 Amount: {data['amount']} Tk\n🔑 TRX: {data['trx']}"
+            await context.bot.send_photo(
+                chat_id=ADMIN_ID, 
+                photo=update.message.photo[-1].file_id, 
+                caption=plain_caption
+            )
+            
         await update.message.reply_text(
-            """✅ আপনার রিকুয়েস্ট সফলভাবে অ্যাডমিনের কাছে পাঠানো হয়েছে।
-
-🔍 যাচাই শেষে আপনার ব্যালেন্সে টাকা যোগ করা হবে।
-
-━━━━━━━━━━━━━━━━━━━━
-⏳ অনুগ্রহ করে কিছুক্ষণ অপেক্ষা করুন
-━━━━━━━━━━━━━━━━━━━━
-
-❗ কোনো ধরনের সমস্যা হলে অনুগ্রহ করে অ্যাডমিনের সাথে যোগাযোগ করুন:
-👤 @Sadhan_chakma"""
-        )
-
+            '<tg-emoji emoji-id="4958587679361991667">🔎</tg-emoji> <b>রিকুয়েস্ট সফল! যাচাই শেষে ব্যালেন্স যোগ হবে।</b>', 
+            parse_mode="HTML"
+            )
         user_steps.pop(user_id)
 
-# ---------------- ADMIN ADD BALANCE ----------------
+# ---------------- ADMIN ADD BALANCE COMMAND ----------------
 async def addbalance(update, context):
-    if update.message.from_user.id != ADMIN_ID:
-        return
-
+    if update.message.from_user.id != ADMIN_ID: return
     try:
-        user_id = context.args[0]
-        amount = int(context.args[1])
-
-        if user_id not in users:
-            users[user_id] = {"balance": 0}
-
-        users[user_id]["balance"] += amount
+        u_id, amount = context.args[0], int(context.args[1])
+        if u_id not in users: 
+            users[u_id] = {"balance": 0}
+        
+        users[u_id]["balance"] += amount
         save_data(users)
-
-        await update.message.reply_text("✅ Balance Added!")
-
+        
+        await update.message.reply_text(f"✅ Balance Added to {u_id}!")
         await context.bot.send_message(
-            chat_id=user_id,
-            text=f"✅ {amount} Tk added to your balance!"
+            chat_id=int(u_id), 
+            text=f'<tg-emoji emoji-id="4958926882994127612">💰</tg-emoji> <b>{amount} Tk added to your balance!</b>', 
+            parse_mode="HTML"
         )
-
     except:
         await update.message.reply_text("❌ Use: /addbalance user_id amount")
